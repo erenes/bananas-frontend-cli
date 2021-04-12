@@ -116,3 +116,13 @@ async def authenticate(session):
     print(f"  {data}")
 
     await Authenticate.wait_for_code()
+
+
+def require_authentication(func):
+    async def decorator(*args, **kwargs):
+        await authenticate(args[0])
+        return func(args, kwargs)
+
+    decorator.__name__ = func.__name__
+    decorator.__doc__ = func.__doc__
+    return decorator

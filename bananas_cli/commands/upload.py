@@ -8,7 +8,7 @@ from ..cli import (
 from ..enums import License
 from ..exceptions import Exit
 from ..helpers import task
-from ..authentication import authenticate
+from ..authentication import require_authentication
 
 log = logging.getLogger(__name__)
 
@@ -28,9 +28,8 @@ def show_validation_errors(data):
 @click.argument("files", nargs=-1, type=click.Path(exists=True, file_okay=True, dir_okay=False))
 @pass_session
 @task
+@require_authentication
 async def upload(session, version, name, description, url, license, files):
-    await authenticate(session)
-
     parts = files[0].split("/")[:-1]
     for filename in files:
         check_parts = filename.split("/")

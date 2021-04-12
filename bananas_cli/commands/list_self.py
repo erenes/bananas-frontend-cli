@@ -6,7 +6,7 @@ from ..cli import (
 )
 from ..exceptions import Exit
 from ..helpers import task
-from ..authentication import authenticate
+from ..authentication import require_authentication
 
 log = logging.getLogger(__name__)
 
@@ -14,8 +14,8 @@ log = logging.getLogger(__name__)
 @cli.command()
 @pass_session
 @task
+@require_authentication
 async def list_self(session):
-    await authenticate(session)
 
     status, data = await session.get("/package/self")
     if status != 200:
